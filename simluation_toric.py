@@ -21,18 +21,19 @@ def Measurement(mu):
 
 
 import networkx as nx
-#import matplotlib.pyplot as plt
+import time
 from scipy.stats import norm
 import matplotlib.pyplot as plt
 for iter1 in range(5):  # This loop is over the dimension of the code
-    # for iter1 in range(5):
+
     rate_list = []      # a list used to store the error rate
     sigma_list = []     # a list used to stor the standard deviation corresponding to error rate
     for iter2 in range(
             5):  # This loop is over the standard deviation sigma of the shift errors
-
-        logical_error = 0    # This variable is used to count the number of wrong error correction
-        sum = 10**5
+        start_time = time.time()
+        logical_error1 = 0    # This variable is used to count the number of wrong error correction
+        logical_error2 = 0
+        sum = 100
         dim = 8 + iter1*4           # The dimension of the code
         sigma = 0.55 + iter2*0.005  # The standard deviation of the shift errors
         #sigma = 0.4
@@ -40,6 +41,7 @@ for iter1 in range(5):  # This loop is over the dimension of the code
         print('sigma', sigma)
         print('sum =', sum)
         print('-------------')
+
         for iter in range(sum):
 
             #---------------------------------------------------------------------------#
@@ -79,8 +81,8 @@ for iter1 in range(5):  # This loop is over the dimension of the code
 # the vertice will be regarded as a defect
 
             syndrome_list = []
-            for u in G0.nodes():
-                neighbors = nx.all_neighbors(G0, u)
+            for u in G1.nodes():
+                neighbors = nx.all_neighbors(G1, u)
 
                 syndrome = 1
                 for v in neighbors:
@@ -142,7 +144,7 @@ for iter1 in range(5):  # This loop is over the dimension of the code
                     i2 = (i + 1) % dim
                     check *= G2[(i, j)][(i2, j)]['weight']
                 if check < 0:
-                    logical_error += 1
+                    logical_error1 += 1
                     break
                 check = 1
 
@@ -156,11 +158,13 @@ for iter1 in range(5):  # This loop is over the dimension of the code
                     break
                 check = 1
 
-        error_rate = (logical_error + logical_error2) / sum
+        error_rate = (logical_error1 + logical_error2) / sum
         rate_list.append(error_rate)
         sigma_list.append(sigma)
-        print('error rate', logical_error / sum)
+        print('error rate',  logical_error1 / sum)
         print('error rate2', logical_error2 / sum)
+        end_time = time.time()
+        print(end_time - start_time)
         print('-----------------------------------')
     x = ['g--', 'b--', 'r--', 'y--', 'w--', 'k--']
     plt.plot(sigma_list, rate_list, x[iter1], label='original')
