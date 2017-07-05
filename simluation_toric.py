@@ -96,19 +96,11 @@ def main():
     #---------------------------------------------------------------------------#
 
     #  Initialize another graph to match all those defects with minimum weight
-                G3 = nx.Graph()
-                G3.add_nodes_from(syndrome_list)
-                for u in syndrome_list:
-                    for v in syndrome_list:
-                        if u == v:
-                            pass
-                        else:
-                            w = nx.algorithms.shortest_paths.weighted.dijkstra_path_length(
-                                G1, u, v, weight='weight')
-
-                            # This '50-w' will transform the max-weight matching
-                            # into minimum weight matching
-                            G3.add_edge(u, v, weight=50 - w)
+                shortest_matrix = floyd(G1,, weight='weight')
+                for i in range(n):
+                    for j in range(i+1, n):
+                        w = shortest_matrix[i, j]
+                        G3.add_edge(syndrome_list[i], syndrome_list[j], weight=50-w)
 
                 matching_list = nx.max_weight_matching(G3)
 
