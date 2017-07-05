@@ -1,0 +1,6 @@
+-i https://pypi.doubanio.com/simple
+
+numpy
+scipy
+networkx
+matplotlib
